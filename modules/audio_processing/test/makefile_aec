@@ -1,0 +1,52 @@
+
+C++ = g++
+
+LOCAL_PATH = ..
+
+INCLUDE = \
+    -I$(LOCAL_PATH)/include \
+    -I$(LOCAL_PATH)/aec/include \
+    -I$(LOCAL_PATH)/aecm/include \
+    -I$(LOCAL_PATH)/agc/include \
+    -I$(LOCAL_PATH)/ns/include \
+    -I$(LOCAL_PATH)/../interface \
+    -I$(LOCAL_PATH)/../.. \
+    -I$(LOCAL_PATH)/../../common_audio/signal_processing/include \
+    -I$(LOCAL_PATH)/../../common_audio/vad/include \
+    -I$(LOCAL_PATH)/../../system_wrappers/interface \
+
+
+CCFLAGS = -fPIC -Wall -g3 -DWEBRTC_NS_FLOAT -DWEBRTC_LINUX 
+
+OBJS = aec_test.o \
+    ../audio_buffer.o \
+    ../audio_processing_impl.o \
+    ../echo_cancellation_impl.o \
+    ../echo_control_mobile_impl.o \
+    ../gain_control_impl.o \
+    ../high_pass_filter_impl.o \
+    ../level_estimator_impl.o \
+    ../noise_suppression_impl.o \
+    ../splitting_filter.o \
+    ../processing_component.o \
+    ../voice_detection_impl.o
+
+
+TARGET = aec_test
+
+
+.PHONY : all clean
+all: $(TARGET)
+
+$(OBJS) : %.o : %.cc
+	$(C++) -c $(CCFLAGS) $(INCLUDE) $< -o $@
+
+$(TARGET): $(OBJS)
+	g++ -fPIC -o $@ $(OBJS) -L. -laudio_processing -lcommon_audio -lsystem_wrappers -lpthread -ldl
+
+install:
+
+uninstall:
+
+clean:
+	rm -f $(OBJS) $(TARGET) 

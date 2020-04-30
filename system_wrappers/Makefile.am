@@ -1,12 +1,23 @@
 ACLOCAL_AMFLAGS = -I m4
 lib_LTLIBRARIES         = libsystem_wrappers.la
-libsystem_wrappers_la_CPPFLAGS = -Iinterface -I.
+libsystem_wrappers_la_CPPFLAGS = -Iinterface -Isource/spreadsortlib -I.
 
 libsystem_wrappers_la_SOURCES  = \
 	source/aligned_malloc.cc\
 	source/cpu.cc\
 	source/cpu_features.cc\
-	source/cpu_info.cc
+	source/cpu_info.cc \
+    source/map.cc \
+    source/sort.cc \
+	source/sleep.cc \
+    source/file_impl.cc \
+    source/list_no_stl.cc \
+	source/condition_variable.cc \
+	source/critical_section.cc \
+	source/event.cc \
+    source/thread.cc \
+    source/trace_impl.cc \
+	source/rw_lock.cc
 	
 
 if UNDER_ANDROID
@@ -19,7 +30,14 @@ libsystem_wrappers_la_SOURCES  += source/cpu_win.cc
 endif
 
 if UNDER_LINUX
-libsystem_wrappers_la_SOURCES  += source/cpu_linux.cc
+libsystem_wrappers_la_SOURCES  += source/cpu_linux.cc \
+	source/atomic32_posix.cc \
+	source/condition_variable_posix.cc \
+	source/critical_section_posix.cc \
+	source/event_posix.cc \
+	source/thread_posix.cc \
+	source/trace_posix.cc \
+    source/rw_lock_posix.cc 
 endif
 
 libsystem_wrappers_la_LDFLAGS = $LDFLAGS -no-undefined
